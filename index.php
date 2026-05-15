@@ -4,35 +4,33 @@ session_start();
 class DadoPoker {
     private const FIGURAS = ['As', 'K', 'Q', 'J', '7', '8'];
     private int $valor;
-    private static int $total = 0;
     
     public function __construct() {
         $this->valor = rand(0, 5);
-        self::$total++;
     }
     
     public function nombreFigura() {
         return self::FIGURAS[$this->valor];
     }
-    
-    public static function getTiradasTotales() {
-        return self::$total;
-    }
-    
-    public static function reiniciar() {
-        self::$total = 0;
-    }
+}
+
+if (!isset($_SESSION['tiradas_totales'])) {
+    $_SESSION['tiradas_totales'] = 0;
 }
 
 if (isset($_POST['reiniciar'])) {
-    DadoPoker::reiniciar();
+    $_SESSION['tiradas_totales'] = 0;
+}
+
+if (isset($_POST['tirar'])) {
+    $_SESSION['tiradas_totales']++;
 }
 
 $dados = [];
 for ($i = 0; $i < 5; $i++) {
     $dados[] = new DadoPoker();
 }
-$total = DadoPoker::getTiradasTotales();
+$total = $_SESSION['tiradas_totales'];
 ?>
 <!DOCTYPE html>
 <html>
